@@ -29,7 +29,7 @@ exports.uploadTourImages = upload.fields( [
 
 const photoFilePath = path.join( process.cwd(), 'public/img/tours' ) ;
 exports.resizeTourImages = catchAsync( async ( req , res , next ) => {
-    console.log( req.files ) ;
+    // console.log( req.files ) ;
     if( !req.files.imageCover || !req.files.images )
         return next() ;
 

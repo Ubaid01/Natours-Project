@@ -6,7 +6,7 @@ export const login = async ( email , password ) => {
     try {
         const res = await axios( {
             method: 'POST' ,
-            url: 'http://127.0.0.1:3000/api/v1/users/login' ,
+            url: '/api/v1/users/login' , // Since API and App are hosted on same server(served from same origin) so relative path will work fine.
             data: {
                 email ,
                 password
@@ -29,7 +29,7 @@ export const logout = async () => {
     try {
         const res = await axios( {
             method: 'GET' ,
-            url: 'http://127.0.0.1:3000/api/v1/users/logout'
+            url: '/api/v1/users/logout'
         } ) ;
         if( res.data.status === 'success' )
             location.reload( true ) ; // ? Using "true" reloads the page from the server NOT from the cache.

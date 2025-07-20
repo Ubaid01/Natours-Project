@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize') ;
 const xss = require('xss-clean') ;
 const hpp = require('hpp') ;
 const cookieParser = require('cookie-parser') ;
+const compression = require('compression') ; // To compress all responses to clients. It will compress text/json NOT images.
 
 const AppError = require('./utils/app_error') ;
 const globalErrorHandler = require('./controllers/error_controller') ;
@@ -95,6 +96,7 @@ const limiter = rateLimit( {
     }
 } ) ;
 app.use( '/api' , limiter ) ; 
+app.use( compression() ) ;
 
 // 3) Routes
 app.use( '/' , viewRouter ) ;
