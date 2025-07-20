@@ -1,0 +1,12 @@
+extends base
+
+block content
+    main.main
+        .error
+            .error__title( style=" margin-top: 10vw ; ")
+                h2.heading-secondary.heading-secondary--error= `Uh oh! ${title}`
+                h2.error__emoji 😢 🤯
+
+            .error__msg= msg
+            .error__msg
+                a.btn-small(href='/') Go Home

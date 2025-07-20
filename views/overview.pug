@@ -1,0 +1,51 @@
+//- "Extending" refers to the concept of template inheritance. It allows one Pug file (a child template) to inherit the structure and layout of another Pug file (a parent or base template). This is useful for reusing common HTML structures like headers, footers, and navigation bars.
+//- extends keyword: Used to specify which template to extend.
+//- block keyword: Used to define placeholders in the base template that child templates can override or append to.
+
+extends base
+
+block content
+    main.main 
+        .card-container
+            each tour in tours
+                .card
+                    .card__header
+                        .card__picture
+                            .card__picture-overlay &nbsp;
+                            //- MY MISTAKE ; Don't use "public" folder in-path so use RELATIVE path using '/'.
+                            img.card__picture-img(src=`/img/tours/${tour.imageCover}`, alt=`Tour ${tour.name}`)
+                        h3.heading-tertirary
+                            span= tour.name
+
+                    .card__details
+                        h4.card__sub-heading= `${tour.difficulty} ${tour.duration}-day tour`
+                        p.card__text= tour.summary
+                        .card__data
+                            svg.card__icon
+                                use(xlink:href='/img/icons.svg#icon-map-pin')
+                            span= tour.startLocation.description
+                        .card__data
+                            svg.card__icon
+                                use(xlink:href='/img/icons.svg#icon-calendar')
+                            span= tour.startDates.length ? new Date( tour.startDates[0] ).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Date not available'
+                        .card__data
+                            svg.card__icon
+                                use(xlink:href='/img/icons.svg#icon-flag')
+                            span= `${tour.locations.length} stops`
+                        .card__data
+                            svg.card__icon
+                                use(xlink:href='/img/icons.svg#icon-user')
+                            span= `${tour.maxGroupSize} people`
+
+                    .card__footer
+                        p
+                            //- Give space after '|' pipe to add manual space OR use &nbsp; (non-breaking space)
+                            span.card__footer-value= tour.price
+                            |  
+                            span.card__footer-text per person
+                        p.card__ratings
+                            span.card__footer-value= tour.ratingsAverage
+                            | 
+                            span.card__footer-text= `rating (${tour.ratingsQuantity})`
+                        a.btn.btn--green.btn--small(href=`/tour/${tour.slug}`) Details
+

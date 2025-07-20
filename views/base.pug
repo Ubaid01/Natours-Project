@@ -1,0 +1,29 @@
+doctype html 
+html
+    head 
+        block head
+        meta(charset='UTF-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+
+        //- It will directly lookup in public folder as its a typical GET request for static files.
+        link(rel='stylesheet', href='/css/style.css') 
+        link(rel="shortcut icon", type="image/png", href="/img/favicon.png")
+        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
+
+        //- Since base template has still access to locals passed to templates so can use Interpolation.
+        title Natours | #{title}
+    body 
+        include _header 
+
+        // Content
+        block content
+        
+        include _footer
+        //- MISTAKE: Including the Stripe script only in 'tour.pug' exposes the global 'Stripe' object only when that specific template is rendered. For all other templates, the Stripe script is missing, so when 'Stripe()' is called in 'stripe.js', it throws "Uncaught ReferenceError: Stripe is not defined".  This issue didn't occur with Mapbox because "displayMap()" is only called when a `#map` element exists, so the code doesn't execute unless it's actually needed.
+        //- So there are 2-main solutions:
+        //- 1. Use `@stripe/stripe-js` and dynamically import Stripe via "loadStripe()" (Load once at module level to avoid re-loading on every call) in stripe.js (recommended).
+        //- 2. If using the global script, include it in "base.pug" at the end of the body to ensure it's loaded before any code tries to call "Stripe()". However, this still risks race conditions in slower networks and a workaround for Bundler AND Parcel.
+        //- ⚠️ Note: Even using `DOMContentLoaded` won’t help if `Stripe` hasn’t finished loading when the listener runs. Also, you cannot bundle `Stripe()` without the global being present, or it will fail at build/runtime. LIKE  stripe-object is NOT-defined instead of OLD-ERROR of Stripe( ) NOT defined.
+        script(src='https://js.stripe.com/v3/') 
+        script(src="/js/bundle.js")
+
