@@ -7,12 +7,13 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon server.js",
+    "start": "node server.js",
+    "dev": "npx nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production npx nodemon server.js",
     "debug": "ndb server.js",
     "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
     "build:js": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
-    "dev": "concurrently \"npm run watch:js\" \"npm run start\""
+    "dev:js": "concurrently \"npm run watch:js\" \"npm run start\""
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -51,5 +52,8 @@
     "eslint-plugin-react": "^7.37.5",
     "parcel-bundler": "^1.12.5",
     "prettier": "^3.6.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
