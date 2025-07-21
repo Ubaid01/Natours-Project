@@ -1,7 +1,6 @@
 {
     "version": 2 ,
-    "buildCommand": "npm run build" ,
-    "builds" : [ { "src": "server.js", "use": "@vercel/node" } ] ,
-    "routes": [ { "src": "/(js|css|images|fonts|static)/(.*)", "dest": "/$1/$2" } ,
-                { "src": "/(.*)", "dest": "server.js" } ]
+    "builds" : [ { "src": "server.js", "use": "@vercel/node" } , 
+                 { "src" : "./public/js" , "use" : "@vercel/static-build" } ] ,
+    "routes": [ { "src": "/(.*)", "dest": "server.js" } ]
 }
