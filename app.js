@@ -17,6 +17,7 @@ const userRouter = require('./routes/user_routes') ;
 const reviewRouter = require('./routes/review_routes') ;
 const viewRouter = require('./routes/view_routes') ;
 const bookingRouter = require('./routes/booking_routes') ;
+const bookingController = require('./controllers/booking_controller') ;
 const app = express() ;
 
 app.enable('trust proxy') ;
@@ -67,15 +68,15 @@ app.set('view engine' , 'pug' ) ;
 app.set('views' , path.join(__dirname , 'views') ) ;
 
 app.use( cors() ) ;
-// app.use( '/api/v1/tours' , cors() , tourRouter ) ;
-// app.use( cors({ origin: 'https://www.natours.com' }) ) ;
 app.options( '*' , cors() ) ;
-// app.options ('/products/:id', cors() ) ;
+
+app.use( '/webhook-checkout' , express.raw( { type: 'application/json' } ) , bookingController.webhookCheckout ) ; // When we receive the body from Stripe ; the stripe function we used then will need the body in RAW format as STREAM not json. THAT's why we used this before express.json() middleware.
 
 // Body parser
 app.use( express.json( { limit: '10kb' } ) ) ;
 app.use( express.urlencoded( { extended: true, limit: '10kb' } ) ) ;
 app.use( cookieParser() ) ;
+app.use( compression() ) ;
 
 // Data sanitization against NoSQL query injection. Can only do this after reading data from req.body.
 app.use( mongoSanitize() ) ;
@@ -105,7 +106,6 @@ const limiter = rateLimit( {
     }
 } ) ;
 app.use( '/api' , limiter ) ; 
-app.use( compression() ) ;
 
 // 3) Routes
 app.use( '/' , viewRouter ) ;
