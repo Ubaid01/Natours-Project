@@ -17,7 +17,7 @@ const createSendToken = ( user , req , res , statusCode = 200 ) => {
     res.cookie( 'jwt' , token , {
         expires: new Date( Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 ) ,
         httpOnly: true , // Using this JS can't access like document.cookie.
-        secure: req.secure || req.get( 'x-forwarded-proto' ) === 'https' // Checked header also due to Heroku proxy management. 
+        secure: process.env.NODE_ENV === 'production'
     } ) ;
 
     user.password = undefined ; // To avoid sending password in response while signing-up user. As we don't save so it will have no effect in DB.

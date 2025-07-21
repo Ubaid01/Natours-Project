@@ -20,7 +20,6 @@ const bookingRouter = require('./routes/booking_routes') ;
 const bookingController = require('./controllers/booking_controller') ;
 const app = express() ;
 
-app.enable('trust proxy') ;
 // 1) GLOBAL MIDDLEWARES
 // Set security HTTP headers
 // app.use( helmet() ) ; // ? Its best to put this early in the middleware stack.
@@ -54,7 +53,7 @@ app.use(
           'https://natours-project-u1.vercel.app',
 
           // Added this to allow Parcel HMR websocket:
-          ...( process.env.NODE_ENV === 'development' ? ['ws://127.0.0.1:*', 'ws://localhost:*'] : [] )
+          ...( process.env.NODE_ENV === 'development' ? ['ws://127.0.0.1:*', 'ws://localhost:*'] : ['wss://natours-project-u1.vercel.app:*'] )
         ],
         imgSrc: ["'self'", 'data:', 'blob:', 'https://*.mapbox.com'],
         workerSrc: ["'self'", 'blob:'],
