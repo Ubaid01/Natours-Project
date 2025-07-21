@@ -50,6 +50,7 @@ app.use(
           'https://*.tiles.mapbox.com',
           'https://api.mapbox.com',
           'https://events.mapbox.com',
+          'https://natours-project-u1.vercel.app',
 
           // Added this to allow Parcel HMR websocket:
           ...( process.env.NODE_ENV === 'development' ? ['ws://127.0.0.1:*', 'ws://localhost:*'] : [] )
