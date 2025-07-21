@@ -7,12 +7,11 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "npx nodemon server.js",
+    "build": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "start": "npx nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production npx nodemon server.js",
     "debug": "ndb server.js",
     "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
-    "build:js": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
     "dev:js": "concurrently \"npm run watch:js\" \"npm run start\""
   },
   "dependencies": {
