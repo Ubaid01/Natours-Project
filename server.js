@@ -31,6 +31,6 @@ process.on( 'unhandledRejection' , err => {
     console.log('Unhandled Rejection! Shutting down...') ;
 
     server.close( () => {
-        mongoose.connection.close( () => process.exit(1) ) ;
+        process.exit(1) ;
     } ) ;
 } ) ;

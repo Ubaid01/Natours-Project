@@ -7,6 +7,7 @@ import { login , logout } from './login' ;
 import { signup } from './signup' ;
 import { updateSettings } from './update_settings' ;
 import { bookTour } from './stripe';
+import { showAlert } from './alert' ;
 
 //? Used data-attribute instead of AJAX request as its faster. An AJAX request is a way for a web page to communicate with a server in the background, without requiring a full page reload.
 
@@ -17,6 +18,7 @@ const logoutBtn = document.querySelector('.nav__el--logout') ;
 const userDataForm = document.querySelector('.form-user-data') ;
 const userPasswordForm = document.querySelector('.form-user-password') ;
 const bookBtn = document.getElementById('book-tour') ;
+const alertMsg = document.body.dataset.alert ;
 
 
 if( mapEle ) {
@@ -100,4 +102,8 @@ if( bookBtn ) {
         await bookTour( tourId ) ;
         e.target.classList.add('dots-disable') ;
     } ) ;
+}
+
+if( alertMsg ) {
+    showAlert( 'success' , alertMsg , 5000 ) ;
 }

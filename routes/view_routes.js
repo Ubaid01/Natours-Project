@@ -3,6 +3,7 @@ const viewController = require('../controllers/view_controller') ;
 const authController = require('../controllers/auth_controller') ;
 const router = express.Router() ;
 
+router.use( viewController.alerts ) ;
 // In views all will be GET-requests.
 router.get('/' , authController.isLoggedIn , viewController.getOverview ) ;
 router.get('/login' , viewController.getLoginForm ) ;

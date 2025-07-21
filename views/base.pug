@@ -12,7 +12,7 @@ html
 
         //- Since base template has still access to locals passed to templates so can use Interpolation.
         title Natours | #{title}
-    body 
+    body( data-alert = `${ alert ? alert : '' }`) 
         include _header 
 
         // Content
