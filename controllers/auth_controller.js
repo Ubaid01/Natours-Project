@@ -12,18 +12,14 @@ const signToken = id => {
     } ) ;
 } ;
 
-const createSendToken = ( user , res , statusCode = 200 ) => {
-    
+const createSendToken = ( user , req , res , statusCode = 200 ) => {
     const token = signToken( user._id ) ;
-    const cookieOptions = {
+    res.cookie( 'jwt' , token , {
         expires: new Date( Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 ) ,
-        httpOnly: true // Using this JS can't access like document.cookie.
-    }
+        httpOnly: true , // Using this JS can't access like document.cookie.
+        secure: req.secure || req.get( 'x-forwarded-proto' ) === 'https' // Checked header also due to Heroku proxy management. 
+    } ) ;
 
-    if( process.env.NODE_ENV === 'production' )
-        cookieOptions.secure = true ;
-
-    res.cookie( 'jwt' , token , cookieOptions ) ;
     user.password = undefined ; // To avoid sending password in response while signing-up user. As we don't save so it will have no effect in DB.
     res.status( statusCode ).json( {
         status: 'success' ,
@@ -46,7 +42,7 @@ exports.signup = catchAsync( async ( req , res , next ) => {
 
     const url = `${req.protocol}://${ req.get('host') }/me` ;
     await new Email( newUser , url ).sendWelcome() ;
-    createSendToken( newUser , res , 201 ) ;
+    createSendToken( newUser , req , res , 201 ) ;
 } ) ;
 
 exports.login = catchAsync( async ( req , res , next ) => {
@@ -59,7 +55,7 @@ exports.login = catchAsync( async ( req , res , next ) => {
     if( !user || !( await user.correctPassword( password , user.password ) ) )
         return next( new AppError( 'Incorrect email or password' , 401 ) ) ;
 
-    createSendToken( user , res ) ;
+    createSendToken( user , req , res ) ;
 } ) ;
 
 exports.logout = ( req , res , next ) => {
@@ -173,7 +169,7 @@ exports.resetPassword = catchAsync( async ( req , res , next ) => {
     user.passwordResetToken = undefined ;
     user.passwordResetExpires = undefined ;
     await user.save() ;
-    createSendToken( user , res ) ;
+    createSendToken( user , req , res ) ;
 } ) ;
 
 exports.updatePassword = catchAsync( async ( req , res , next ) => {
@@ -188,5 +184,5 @@ exports.updatePassword = catchAsync( async ( req , res , next ) => {
     user.password = req.body.password ;
     user.passwordConfirm = req.body.passwordConfirm ;
     await user.save() ;
-    createSendToken( user , res ) ;
+    createSendToken( user , req , res ) ;
 } ) ;

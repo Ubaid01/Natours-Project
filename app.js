@@ -8,6 +8,7 @@ const xss = require('xss-clean') ;
 const hpp = require('hpp') ;
 const cookieParser = require('cookie-parser') ;
 const compression = require('compression') ;
+const cors = require('cors') ;
 
 const AppError = require('./utils/app_error') ;
 const globalErrorHandler = require('./controllers/error_controller') ;
@@ -18,6 +19,7 @@ const viewRouter = require('./routes/view_routes') ;
 const bookingRouter = require('./routes/booking_routes') ;
 const app = express() ;
 
+app.enable('trust proxy') ;
 // 1) GLOBAL MIDDLEWARES
 // Set security HTTP headers
 // app.use( helmet() ) ; // ? Its best to put this early in the middleware stack.
@@ -62,6 +64,12 @@ app.use(
 
 app.set('view engine' , 'pug' ) ;
 app.set('views' , path.join(__dirname , 'views') ) ;
+
+app.use( cors() ) ;
+// app.use( '/api/v1/tours' , cors() , tourRouter ) ;
+// app.use( cors({ origin: 'https://www.natours.com' }) ) ;
+app.options( '*' , cors() ) ;
+// app.options ('/products/:id', cors() ) ;
 
 // Body parser
 app.use( express.json( { limit: '10kb' } ) ) ;
